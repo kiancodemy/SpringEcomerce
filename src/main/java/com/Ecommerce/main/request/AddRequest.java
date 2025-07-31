@@ -1,11 +1,10 @@
-package com.Ecommerce.main.model;
-
+package com.Ecommerce.main.request;
+import com.Ecommerce.main.models.Category;
+import lombok.Data;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
 
-public class Product {
-
+@Data
+public class AddRequest {
     private Long id;
     private String brand;
     private String name;
@@ -13,7 +12,4 @@ public class Product {
     private BigDecimal price;
     private int inventory;
     private Category category;
-    private List<Image> images;
-    }
-
-
+}
