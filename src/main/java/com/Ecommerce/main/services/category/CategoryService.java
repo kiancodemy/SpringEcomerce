@@ -1,12 +1,15 @@
 package com.Ecommerce.main.services.category;
-
+import com.Ecommerce.main.exception.AlreadyExist;
 import com.Ecommerce.main.exception.ProdcutNotfound;
+import com.Ecommerce.main.exception.ResourceNotFound;
 import com.Ecommerce.main.models.Category;
 import com.Ecommerce.main.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class CategoryService implements IntCategory{
@@ -14,7 +17,7 @@ public class CategoryService implements IntCategory{
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(()-> new ProdcutNotfound("OT FOUND"))
+        return categoryRepository.findById(id).orElseThrow(()-> new ResourceNotFound("category not FOUND"));
 
     }
 
@@ -29,19 +32,20 @@ public class CategoryService implements IntCategory{
     }
 
     @Override
-    public Category upateCategory(Category category) {
-        return null;
+    public Category addCategory(Category category) {
+        return Optional.of(category).filter(c->!categoryRepository.existsByName(c.getName())).map(categoryRepository::save).orElseThrow(()-> new AlreadyExist(category.getName()+"already exists"));
     }
 
     @Override
-    public Category createCategory(Category category) {
-        return null;
+    public Category upateCategory(Category category,Long id) {
+        return Optional.ofNullable(getCategoryById(id)).map(c->{c.setName(category.getName());return categoryRepository.save(c);}).orElseThrow(()->new ResourceNotFound("NOT FOUND BY ID"));
     }
+
     @Override
     public void deleteCategory(Long id) {
         categoryRepository.findById(id).ifPresentOrElse(
                 category -> categoryRepository.deleteById(id),
-                () -> { throw new ProdcutNotfound("not found by this id"); }
+                () -> { throw new ResourceNotFound("not found by this id"); }
         );
     }
 }
