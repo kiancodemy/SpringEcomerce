@@ -1,6 +1,5 @@
 package com.Ecommerce.main.services.category;
 import com.Ecommerce.main.exception.AlreadyExist;
-import com.Ecommerce.main.exception.ProdcutNotfound;
 import com.Ecommerce.main.exception.ResourceNotFound;
 import com.Ecommerce.main.models.Category;
 import com.Ecommerce.main.repository.CategoryRepository;
@@ -33,7 +32,7 @@ public class CategoryService implements IntCategory{
 
     @Override
     public Category addCategory(Category category) {
-        return Optional.of(category).filter(c->!categoryRepository.existsByName(c.getName())).map(categoryRepository::save).orElseThrow(()-> new AlreadyExist(category.getName()+"already exists"));
+        return Optional.ofNullable(category).filter(c->!categoryRepository.existsByName(c.getName())).map(categoryRepository::save).orElseThrow(()-> new AlreadyExist(category.getName()+"already exists"));
     }
 
     @Override
