@@ -1,8 +1,7 @@
 package com.Ecommerce.main.services.category;
-
 import com.Ecommerce.main.models.Category;
-
 import java.util.List;
+
 
 public interface IntCategory {
 

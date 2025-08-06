@@ -18,10 +18,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@RequestMapping("${api.prefix}/image")
+@RequestMapping("/images")
 @RequiredArgsConstructor
 public class ImageController {
-    private ImageService imageService;
+    private final ImageService imageService;
 
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
@@ -37,7 +37,7 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/download/{imageId}")
+    @GetMapping("/image/download/{imageId}")
     public ResponseEntity<Resource> downlaodimage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
         Blob blob = image.getImage();
@@ -50,7 +50,7 @@ public class ImageController {
     }
 
     @PutMapping("/updated/{imageId}")
-    public ResponseEntity<ApiResponse> update(@PathVariable Long imageId, @RequestBody MultipartFile image) {
+    public ResponseEntity<ApiResponse> update(@PathVariable Long imageId, @RequestParam MultipartFile image) {
         try {
             imageService.UpdateImage(image , imageId);
             return ResponseEntity.ok(new ApiResponse("sucessfully  updateted ", null));

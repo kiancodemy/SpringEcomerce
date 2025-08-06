@@ -27,7 +27,7 @@ public class CategoryService implements IntCategory{
 
     @Override
     public Category getCategoryByName(String name) {
-        return categoryRepository.findByCategoryName(name);
+        return categoryRepository.findByName(name);
     }
 
     @Override

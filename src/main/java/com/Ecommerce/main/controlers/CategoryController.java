@@ -1,4 +1,6 @@
 package com.Ecommerce.main.controlers;
+import com.Ecommerce.main.exception.AlreadyExist;
+import com.Ecommerce.main.exception.ResourceNotFound;
 import com.Ecommerce.main.models.Category;
 import com.Ecommerce.main.response.ApiResponse;
 import com.Ecommerce.main.services.category.CategoryService;
@@ -18,7 +20,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/allcategory")
-    public ResponseEntity<ApiResponse> getall(){
+    public ResponseEntity<ApiResponse> getAllCategory(){
         try {
             List <Category>all= categoryService.GetAllCategory();
             return ResponseEntity.ok().body(new ApiResponse("success",all));
@@ -31,14 +33,14 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id){
         try {
             Category category=categoryService.getCategoryById(id);
-            return ResponseEntity.ok().body(new ApiResponse("success",category));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("success",e.getMessage()));
+            return ResponseEntity.ok().body(new ApiResponse("found successfully",category));
+        } catch (ResourceNotFound e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
         }
 
     }
-
-    public ResponseEntity<ApiResponse> getCategoryByName(String name){
+    @GetMapping("/getbyname/{name}")
+    public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name){
         try {
             Category category=categoryService.getCategoryByName(name);
             return ResponseEntity.ok().body(new ApiResponse("success",category));
@@ -52,17 +54,17 @@ public class CategoryController {
         try {
             categoryService.deleteCategory(id);
             return ResponseEntity.ok().body(new ApiResponse("success",categoryService.getCategoryById(id)));
-        } catch (Exception e) {
+        } catch (ResourceNotFound e) {
            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("failed to delte",e.getMessage()));
         }
     }
 
     @PostMapping("/addCategory")
-    public ResponseEntity<ApiResponse> addCategory(@Valid @NotNull(message = "it cant be null") @RequestBody Category category) {
+    public ResponseEntity<ApiResponse> addCategory(@Valid @RequestBody Category category) {
         try {
             Category find=categoryService.addCategory(category);
             return ResponseEntity.ok().body(new ApiResponse("success",find));
-        } catch (Exception e) {
+        } catch (AlreadyExist e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("sfailed",e.getMessage()));
         }
     }
@@ -72,14 +74,9 @@ public class CategoryController {
         try {
             Category create=categoryService.upateCategory(category, id);
             return ResponseEntity.ok().body(new ApiResponse("success",create));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("sfailed",e.getMessage()));
+        } catch (ResourceNotFound e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),null));
         }
 
     }
-
-
-
-
-
 }

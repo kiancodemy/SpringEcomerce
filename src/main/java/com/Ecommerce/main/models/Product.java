@@ -1,11 +1,9 @@
 package com.Ecommerce.main.models;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -34,6 +32,7 @@ public class Product {
     }
 
     @ManyToOne
+
     @JoinColumn(name = "category-id",referencedColumnName = "id",foreignKey = @ForeignKey(name="category-id-key"))
     private Category category;
 

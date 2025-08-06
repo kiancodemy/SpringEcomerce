@@ -5,6 +5,7 @@ import com.Ecommerce.main.models.Image;
 import com.Ecommerce.main.models.Product;
 import com.Ecommerce.main.repository.ImageRepository;
 import com.Ecommerce.main.services.product.ProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,12 +38,18 @@ public class ImageService implements InterImage {
     }
 
     @Override
+    @Transactional
     public List<ImageDto> saveImage(List<MultipartFile> file, Long prodcutid) {
        try{
            Product product =productService.GetProdcutbyid(prodcutid);
            List<ImageDto> all=new ArrayList<>();
            for(MultipartFile files: file){
                Image image = new Image();
+               if (files.getSize() > 5 * 1024 * 1024) {
+                   throw new IllegalArgumentException("File " + files.getOriginalFilename() + " exceeds 5MB limit.");
+               }
+
+
                image.setFilename(files.getOriginalFilename());
                image.setFiletype(files.getContentType());
                image.setImage(new SerialBlob(files.getBytes()));
