@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -78,11 +77,12 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getByName(@RequestParam  String name){
         try {
             List<Product> all=productService.FindByName(name);
-            List<ProductDto> dto=productService.convertToDtoList(all);
+
             if(all.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("There is not product",null));
 
             }
+            List<ProductDto> dto=productService.convertToDtoList(all);
             return ResponseEntity.ok(new ApiResponse("sucess",dto));
         } catch (Exception e) {
 
@@ -95,11 +95,12 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getByCategory(@RequestParam String name){
         try {
             List<Product> all=productService.GetAllProdcutsByCategory(name);
-            List<ProductDto> dto=productService.convertToDtoList(all);
+
             if(all.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("There is not product",null));
 
             }
+            List<ProductDto> dto=productService.convertToDtoList(all);
             return ResponseEntity.ok(new ApiResponse("sucess",dto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("failed",e.getMessage()));
@@ -109,11 +110,12 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getAll(){
         try {
             List<Product> all=productService.GetAllProdcuts();
-            List<ProductDto> dto=productService.convertToDtoList(all);
+
             if(all.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("There is not product",null));
 
             }
+            List<ProductDto> dto=productService.convertToDtoList(all);
             return ResponseEntity.ok(new ApiResponse("sucess",dto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("failed",e.getMessage()));
@@ -124,11 +126,13 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getAllByBrand(@RequestParam String brand){
         try {
             List<Product> all= productService.GetAllProdcutsByBrand(brand);
-            List<ProductDto> dto=productService.convertToDtoList(all);
+
             if(all.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("There is not product",null));
 
-            };
+            }
+
+            List<ProductDto> dto=productService.convertToDtoList(all);
             return ResponseEntity.ok(new ApiResponse("sucess",dto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("failed",e.getMessage()));
@@ -158,11 +162,12 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getAllByBrandAndName(@RequestParam String brand,@RequestParam String name){
         try {
             List<Product> all= productService.GetProdcutByBrandAndName(brand,name);
-            List<ProductDto> dto=productService.convertToDtoList(all);
+
             if(all.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("There is not product",null));
 
-            };
+            }
+            List<ProductDto> dto=productService.convertToDtoList(all);
             return ResponseEntity.ok(new ApiResponse("sucess",dto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("failed",e.getMessage()));
