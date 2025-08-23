@@ -22,10 +22,20 @@ public class Product {
     private String brand;
     private BigDecimal price;
     private int inventory;
+
+    public Product(String name, String description, String brand, BigDecimal price, int inventory) {
+        this.name = name;
+        this.description = description;
+        this.brand = brand;
+        this.price = price;
+        this.inventory = inventory;
+    }
+
     @ManyToOne
     @JoinColumn(name="category-id",referencedColumnName = "id")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Image> images;
+
 }

@@ -1,15 +1,17 @@
 package com.Ecommerce.main.service.product;
 
 import com.Ecommerce.main.model.Product;
+import com.Ecommerce.main.request.AddProduct;
+import com.Ecommerce.main.request.UpdateProduct;
 
 import java.util.List;
 
 public interface ProductInterface {
-    Product addProduct(Product product);
+    Product addProduct(AddProduct product);
     List<Product> getAllProducts();
     Product getProductById(Long id);
     void deleteProductById(Long id);
-    void updateProduct(Product product,Long id);
+    Product updateProduct(UpdateProduct product, Long id);
     List<Product> getAllProductsByCategory(String category);
     List<Product> getAllProductByBrand(String brand);
     List<Product> getAllProductsByCategoryAndBrand(String category,String brand);

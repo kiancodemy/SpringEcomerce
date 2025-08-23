@@ -1,0 +1,56 @@
+package com.Ecommerce.main.service.category;
+import com.Ecommerce.main.exception.CategoryNotFound;
+import com.Ecommerce.main.model.Category;
+import com.Ecommerce.main.repository.CategoryRepository;
+import com.Ecommerce.main.request.AddCategory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@RequiredArgsConstructor
+@Service
+public class CategoryService implements CategoryInterface{
+    private final CategoryRepository categoryRepository;
+
+    @Override
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
+    @Override
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(()->new CategoryNotFound("category not found"));
+
+    }
+
+    @Override
+    public Category getCategoryByName(String name) {
+        return categoryRepository.getCategoriesByName(name);
+    }
+
+    @Override
+    public void DeleteCategoryById(Long id) {
+        categoryRepository.findById(id).ifPresentOrElse(c->categoryRepository.deleteById(id),()->{throw new CategoryNotFound("category not found");});
+
+    }
+
+    @Override
+    public void DeleteAllCategories() {
+        categoryRepository.deleteAll();
+
+    }
+
+    @Override
+    public Category addCategory(AddCategory category) {
+        return Optional.ofNullable(categoryRepository.findByName(category.getName())).orElseGet(()->{Category newOne=new Category(category.getName());return categoryRepository.save(newOne);});
+    }
+
+    @Override
+    public Category updateCategory(AddCategory category, Long id) {
+        return categoryRepository.findById(id).map(c->{c.setName(category.getName());return categoryRepository.save(c);}).orElseThrow(()->new CategoryNotFound("NOT FOUND"));
+
+    }
+
+}
