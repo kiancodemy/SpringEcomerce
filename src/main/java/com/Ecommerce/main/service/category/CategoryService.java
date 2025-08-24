@@ -37,11 +37,6 @@ public class CategoryService implements CategoryInterface{
 
     }
 
-    @Override
-    public void DeleteAllCategories() {
-        categoryRepository.deleteAll();
-
-    }
 
     @Override
     public Category addCategory(AddCategory category) {

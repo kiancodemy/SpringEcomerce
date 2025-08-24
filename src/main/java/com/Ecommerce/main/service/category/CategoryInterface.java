@@ -11,7 +11,6 @@ public interface CategoryInterface {
     Category getCategoryById(Long id);
     Category getCategoryByName(String name);
     void DeleteCategoryById(Long id);
-    void DeleteAllCategories();
     Category addCategory(AddCategory category);
     Category updateCategory(AddCategory  category, Long id);
 
