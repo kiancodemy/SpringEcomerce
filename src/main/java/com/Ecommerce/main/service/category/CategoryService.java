@@ -1,4 +1,5 @@
 package com.Ecommerce.main.service.category;
+import com.Ecommerce.main.exception.AlreadyExist;
 import com.Ecommerce.main.exception.CategoryNotFound;
 import com.Ecommerce.main.model.Category;
 import com.Ecommerce.main.repository.CategoryRepository;
@@ -44,7 +45,7 @@ public class CategoryService implements CategoryInterface{
 
     @Override
     public Category addCategory(AddCategory category) {
-        return Optional.ofNullable(categoryRepository.findByName(category.getName())).orElseGet(()->{Category newOne=new Category(category.getName());return categoryRepository.save(newOne);});
+        return Optional.of(category).filter(c->!categoryRepository.existsByName(category.getName())).map(c->categoryRepository.save(new Category(category.getName()))).orElseThrow(()->new AlreadyExist("already exist"));
     }
 
     @Override

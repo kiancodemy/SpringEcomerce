@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Blob;
+
 
 @Entity
 @Getter
@@ -15,10 +17,11 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String filename;
+    private String filetype;
     private String filepath;
 
     @Lob
-    private byte[] image;
+    private Blob image;
     private String downloadUrl;
 
     @ManyToOne
