@@ -1,12 +1,17 @@
 package com.Ecommerce.main.service.product;
+import com.Ecommerce.main.Dto.ImageDto;
+import com.Ecommerce.main.Dto.ProductDto;
 import com.Ecommerce.main.exception.ProdcutNotFound;
 import com.Ecommerce.main.model.Category;
+import com.Ecommerce.main.model.Image;
 import com.Ecommerce.main.model.Product;
 import com.Ecommerce.main.repository.CategoryRepository;
+import com.Ecommerce.main.repository.ImageRepository;
 import com.Ecommerce.main.repository.ProductRepository;
 import com.Ecommerce.main.request.AddProduct;
 import com.Ecommerce.main.request.UpdateProduct;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +21,8 @@ import java.util.Optional;
 public class ProductService implements ProductInterface {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
 
 
     @Override
@@ -63,7 +70,7 @@ public class ProductService implements ProductInterface {
 
     @Override
     public void deleteProductById(Long id) {
-        productRepository.findById(id).ifPresentOrElse(productRepository::delete,()->{throw new ProdcutNotFound("prodcut not found");});
+        productRepository.findById(id).ifPresentOrElse(c->productRepository.deleteById(id),()->{throw new ProdcutNotFound("prodcut not found");});
 
     }
 
@@ -95,5 +102,22 @@ public class ProductService implements ProductInterface {
     @Override
     public Long CountProductByBrandAndName(String brand, String name) {
         return productRepository.countProductByBrandAndName(brand,name);
+
+
+    }
+
+    @Override
+    public ProductDto covertToDto(Product product) {
+        ProductDto productDto=modelMapper.map(product,ProductDto.class);
+        List<Image> images=imageRepository.findByProductId(product.getId());
+        List<ImageDto> dtoImage=images.stream().map(image->modelMapper.map(image,ImageDto.class)).toList();
+        productDto.setImages(dtoImage);
+        return productDto;
+    }
+    @Override
+    public List<ProductDto> covertToDtotolist(List<Product> products) {
+        return products.stream().map(this::covertToDto).toList();
+
+
     }
 }

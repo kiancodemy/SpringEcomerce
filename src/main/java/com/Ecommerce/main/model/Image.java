@@ -1,5 +1,6 @@
 package com.Ecommerce.main.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,17 +15,17 @@ import java.sql.Blob;
 @NoArgsConstructor
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String filename;
     private String filetype;
-    private String filepath;
 
     @Lob
+    @JsonIgnore
     private Blob image;
     private String downloadUrl;
 
     @ManyToOne
-    @JoinColumn(name="product-id",nullable = false,unique = true)
+    @JoinColumn(name="product_id", nullable = false)
     private Product product;
 }

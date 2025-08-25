@@ -28,7 +28,7 @@ public class CategoryService implements CategoryInterface{
 
     @Override
     public Category getCategoryByName(String name) {
-        return categoryRepository.getCategoriesByName(name);
+        return Optional.ofNullable(categoryRepository.getCategoryByName(name)).orElseThrow(()->new CategoryNotFound("category not found"));
     }
 
     @Override

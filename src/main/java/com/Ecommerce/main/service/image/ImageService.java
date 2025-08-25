@@ -44,7 +44,7 @@ public class ImageService implements ImageInterface {
             image.setImage(new SerialBlob(multipartFile.getBytes()));
             image.setProduct(product);
             Image saved=imageRepository.save(image);
-            String builtIntDownload="/api/v1/images/image/download";
+            String builtIntDownload="/api/v1/images/image/download/";
             String downloadUrl=builtIntDownload+saved.getId();
             saved.setDownloadUrl(downloadUrl);
             imageRepository.save(saved);
