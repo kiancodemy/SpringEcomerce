@@ -15,6 +15,9 @@ public interface ProductInterface {
     Product updateProduct(UpdateProduct product, Long id);
     List<Product> getAllProductsByCategory(String category);
     List<Product> getAllProductByBrand(String brand);
+
+    List<Product> getAllProductsByCategoryAndBrand(String category, String brand);
+
     List<Product> getProductByName(String name);
     List<Product> getProductByBrandAndName(String brand,String name);
     Long CountProductByBrandAndName(String brand,String name);

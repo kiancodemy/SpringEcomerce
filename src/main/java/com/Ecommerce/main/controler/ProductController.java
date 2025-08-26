@@ -22,6 +22,9 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getAllProducts() {
         try{
             List<Product> products = productService.getAllProducts();
+            if(products.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("it is empty",null));
+            }
             List<ProductDto> productDtos=productService.covertToDtotolist(products);
             return ResponseEntity.ok(new ApiResponse("successfully Get all", productDtos));
 
@@ -61,6 +64,9 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductByCategory(@PathVariable("category") String category) {
         try {
             List<Product> allProduct=productService.getAllProductsByCategory(category);
+            if(allProduct.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("it is empty",null));
+            }
             List<ProductDto> productDtos=productService.covertToDtotolist(allProduct);
             return ResponseEntity.ok(new ApiResponse("successfully Get product by category", productDtos));
         } catch (Exception e) {
@@ -88,6 +94,11 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductByName(@PathVariable("name") String name) {
         try {
             List<Product> allProduct=productService.getProductByName(name);
+
+            if(allProduct.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("it is empty",null));
+            }
+
             List<ProductDto> productDtos=productService.covertToDtotolist(allProduct);
 
             return ResponseEntity.ok(new ApiResponse("successfully Get product by brand", productDtos));
@@ -99,6 +110,9 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductByBrandAndName(@PathVariable String brand,@PathVariable String name) {
         try {
             List<Product> allProduct=productService.getProductByBrandAndName(brand,name);
+            if(allProduct.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("it is empty",null));
+            }
             List<ProductDto> productDtos=productService.covertToDtotolist(allProduct);
             return ResponseEntity.ok(new ApiResponse("successfully Get product by brand and name",  productDtos));
         } catch (Exception e) {
