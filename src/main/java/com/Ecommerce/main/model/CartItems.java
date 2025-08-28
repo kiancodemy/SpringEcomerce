@@ -1,4 +1,5 @@
 package com.Ecommerce.main.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,12 @@ public class CartItems {
 
 
     @ManyToOne
-    @JoinColumn(name="prodcut-id",referencedColumnName = "id",nullable = false)
+    @JoinColumn(name="product-id",referencedColumnName = "id",nullable = false)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name="card-id",referencedColumnName = "id",nullable = false)
+    @JsonIgnore
+    @JoinColumn(name="cart-id",referencedColumnName = "id",nullable = false)
     private Cart cart;
 
     public void setTotalPrice() {

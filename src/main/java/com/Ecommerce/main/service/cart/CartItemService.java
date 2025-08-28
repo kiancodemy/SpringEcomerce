@@ -5,8 +5,6 @@ import com.Ecommerce.main.model.CartItems;
 import com.Ecommerce.main.model.Product;
 import com.Ecommerce.main.repository.CartItemRepository;
 import com.Ecommerce.main.repository.CartRepository;
-import com.Ecommerce.main.repository.CategoryRepository;
-import com.Ecommerce.main.repository.ProductRepository;
 import com.Ecommerce.main.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,7 +55,7 @@ public class CartItemService implements CarItemInterface  {
         Cart cart=cartService.getCartById(cartId);
 
         cart.getCartItems().stream().filter(item->item.getProduct().getId().equals(productId)
-        ).findFirst().ifPresent(first->{first.setQuantity(first.getQuantity());first.setUnitPrice(first.getProduct().getPrice());first.setTotalPrice();});
+        ).findFirst().ifPresent(first->{first.setQuantity(quantity);first.setUnitPrice(first.getProduct().getPrice());first.setTotalPrice();});
         cart.UpdateTotalAmount();
         cartRepository.save(cart);
 

@@ -10,4 +10,5 @@ public interface CartInterface {
     void clearCart(Long cartId);
     BigDecimal getTotalPrice(Long cartId);
 
+    Long addRandomId();
 }
