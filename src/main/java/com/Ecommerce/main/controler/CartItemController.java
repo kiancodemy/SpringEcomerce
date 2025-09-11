@@ -1,7 +1,9 @@
 package com.Ecommerce.main.controler;
+import com.Ecommerce.main.model.User;
 import com.Ecommerce.main.response.ApiResponse;
 import com.Ecommerce.main.service.cart.CartItemService;
 import com.Ecommerce.main.service.cart.CartService;
+import com.Ecommerce.main.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +16,15 @@ import org.springframework.web.bind.annotation.*;
 public class CartItemController {
     private final CartItemService cartItemService;
     private final CartService cartService;
+    private final UserService userService;
 
 
     @PostMapping("/addCartitem")
-    public ResponseEntity<ApiResponse> addCartItem(@RequestParam(required = false)  Long cartId ,@RequestParam  Long productId, @RequestParam  int quantity){
+    public ResponseEntity<ApiResponse> addCartItem(@RequestParam  Long productId, @RequestParam  int quantity){
         try {
-            if(cartId==null){
-                cartId=cartService.addRandomId();
-            }
+
+            User user =userService.getUser(1L);
+            Long cartId=cartItemService.getUserCardI(user);
             cartItemService.addCartItem(cartId,productId,quantity);
             return ResponseEntity.ok().body(new ApiResponse("added successfully",null));
         } catch (Exception e) {

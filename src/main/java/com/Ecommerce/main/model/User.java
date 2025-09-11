@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,6 +23,17 @@ public class User {
     private String email;
     @JsonIgnore
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "user-role",joinColumns = @JoinColumn(name="user-id",referencedColumnName = "id"),inverseJoinColumns =@JoinColumn(name="role-id",referencedColumnName = "id") )
+    private List<Role> roles=new  ArrayList<>();
+
+    public User(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders=new ArrayList<>();

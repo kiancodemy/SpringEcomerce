@@ -1,4 +1,5 @@
 package com.Ecommerce.main.service.order;
+import com.Ecommerce.main.Dto.OrderDto;
 import com.Ecommerce.main.Dto.OrderStatus;
 import com.Ecommerce.main.exception.OrderNotFound;
 import com.Ecommerce.main.model.Cart;
@@ -11,6 +12,7 @@ import com.Ecommerce.main.repository.ProductRepository;
 import com.Ecommerce.main.service.cart.CartService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +26,7 @@ public class OrderService implements OrderInterface {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartService cartService;
+    private final ModelMapper modelMapper;
 
 
     @Override
@@ -41,10 +44,8 @@ public class OrderService implements OrderInterface {
     }
 
     @Override
-    public Order getOrderById(Long id) {
-        Order order= orderRepository.findById(id).orElseThrow(()->new OrderNotFound("Order not found"));
-        order.UpdateTotalAmount();
-        return order;
+    public OrderDto getOrderById(Long id) {
+        return  orderRepository.findById(id).map(this::changeToDto).orElseThrow(()->new OrderNotFound("Order not found"));
     }
 
 
@@ -70,5 +71,15 @@ public class OrderService implements OrderInterface {
     public List<Order> getUserOrders(Long userid){
         return  orderRepository.findByUserId(userid);
     }
+    @Override
+    public OrderDto changeToDto(Order order) {
+        return modelMapper.map(order,OrderDto.class);
+    }
+    @Override
+    public List<OrderDto> userOrders(Long userid){
+        return orderRepository.findByUserId(userid).stream().map(this::changeToDto).toList();
+
+    }
+
 
 }

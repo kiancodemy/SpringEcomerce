@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name="carts")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +21,7 @@ public class Cart {
     private Set<CartItems> cartItems = new HashSet<>();
 
     @OneToOne
-    @JoinColumn(name="user-id")
+    @JoinColumn(name="user_id")
     private User user;
 
     public void addItem(CartItems item){

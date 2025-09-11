@@ -1,4 +1,5 @@
 package com.Ecommerce.main.controler;
+import com.Ecommerce.main.Dto.OrderDto;
 import com.Ecommerce.main.model.Order;
 import com.Ecommerce.main.response.ApiResponse;
 import com.Ecommerce.main.service.order.OrderService;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("${api.prefix}/order")
@@ -16,11 +19,10 @@ public class OrderController {
 
     private final OrderService orderService;
 
-
     @GetMapping("/getAllOrders/{id}")
     public ResponseEntity<ApiResponse> getOrder(@PathVariable("id") Long id) {
         try {
-            Order order=orderService.getOrderById(id);
+            OrderDto order=orderService.getOrderById(id);
             return ResponseEntity.ok(new ApiResponse("Order found",order));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),null));
@@ -28,6 +30,8 @@ public class OrderController {
         }
 
     }
+
+
     @PostMapping("/createOrder")
     public ResponseEntity<ApiResponse> createOrder(@RequestBody Long id ) {
         try {
@@ -39,5 +43,16 @@ public class OrderController {
 
     }
 
+
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<ApiResponse> getUserOrders(@RequestBody Long id ) {
+        try {
+            List<OrderDto> userOrders=orderService.userOrders(id);
+            return ResponseEntity.ok(new ApiResponse("Order created", userOrders));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),null));
+        }
+
+    }
 
 }
